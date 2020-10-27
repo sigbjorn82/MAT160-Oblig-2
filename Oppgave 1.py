@@ -1,25 +1,19 @@
 import numpy as np
 import pandas as pd
-print('oppgave 1a)')
+
 
 
 n = 4 #int(input('Size n of matrix: n= '))
-A_any= np.random.randn(n, n)
-U_any = A_any*np.tri(n).T
 
-print('')
-print('Random triangular matrix: ')
+A_any= np.random.randn(n, n) # Generate a random (n x n) matrix
+U_any = A_any*np.tri(n).T    # Triangulating matrix
 
-dfU_any = pd.DataFrame(
-U_any,
-index=None,
-columns=['x_1', 'x_2', 'x_3', 'x_4'])
-
-print(dfU_any)
 
 x_true = np.random.randn(n)
 
 b_any = np.dot(U_any, x_true)
+
+
 
 def backU(U,b,n):
     '''Takes inn triangular matrix U, vector b and dimention of matrix n
@@ -35,37 +29,85 @@ def backU(U,b,n):
         x_computed[i] = x_tmp / U[i, i]
     return x_computed
 
-print('') #space
-print('') #--"--
-print('') #--"--
 
 
 x_numpy = lambda U, b: np.linalg.solve(U, b)             # numpy sin innebygde solver
 
+
+
+print('') #space
+print('') #--""--
+print('') #--""--
+
+
+
+
+print('oppgave 1a)')
+print('')
+print('Random triangular matrix: ')
+
+dfU_any = pd.DataFrame(
+U_any,
+index=None,
+columns=['x_1', 'x_2', 'x_3', 'x_4'])
+
+print(dfU_any)
+
+
+
+print('') #space
+print('') #--""--
+print('') #--""--
+
+
+
 #samlet visning av resultatene
-df = pd.DataFrame(
+df_a = pd.DataFrame(
 [x_true,
 backU(U=U_any, b=b_any, n=n),
 x_numpy(U_any,b_any)],
 index=['x_true', 'x_computed', 'x_(numpy.solue)*'],
 columns=['x_1', 'x_2', 'x_3', 'x_4'])
 
-print(df)
-print('* For en utvidet kontroll testes matrisen med numpys innebygde solver funksjon som ikke er backsubstitution')
+print(df_a)
 print('')
-print('Oppgave 1b)')
+print('* For en utvidet kontroll testes matrisen med numpys innebygde solver funksjon som ikke er backsubstitution')
 
+
+
+print('') #space
+print('') #--""--
+print('') #--""--
+
+
+print('Oppgave 1b)')
 U =-np.tri(10,10).T
 b= np.ones(10).T
-print('U - Matrix:')
-print(U)
-print('')
-print('b-vector:')
-print(b)
-print('')
-print('Ux=b løst ved bruk av backU funksjon:')
-print('x= ',backU(U,b,10))
-print('')
-print('')
-print('Til sammenligning får vi ved numpy solver solution: x= ', x_numpy(U,b))
 
+
+dfU = pd.DataFrame(
+U,
+index=None,
+columns=['x_1', 'x_2', 'x_3', 'x_4', 'x_5', 'x_6', 'x_7', 'x_8', 'x_9', 'x_10'])
+
+print(dfU)
+
+
+
+print('') #space
+print('') #--""--
+print('') #--""--
+
+
+#samlet visning av resultatene i oppgave b
+df_b = pd.DataFrame(
+[backU(U,b,10), x_numpy(U,b)],
+index=['x_(back substitution) ', 'x_(numpy.solue)*'],
+columns=['x_1', 'x_2', 'x_3', 'x_4', 'x_5', 'x_6', 'x_7', 'x_8', 'x_9', 'x_10'])
+
+print(df_b)
+print('')
+print('* For en utvidet kontroll testes matrisen med numpys innebygde solver funksjon som ikke er backsubstitution')
+
+
+print(backU(U,b,10))
