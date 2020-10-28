@@ -81,7 +81,18 @@ print('') #--""--
 
 
 print('Oppgave 1b)')
-U =-np.tri(10,10).T
+print('Oppgave 1b)')
+U =np.array([[1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+             [0, 1,-1,-1,-1,-1,-1,-1,-1,-1],
+             [0, 0 ,1,-1,-1,-1,-1,-1,-1,-1],
+             [0, 0, 0, 1,-1,-1,-1,-1,-1,-1],
+             [0, 0, 0, 0, 1,-1,-1,-1,-1,-1],
+             [0, 0, 0, 0, 0, 1,-1,-1,-1,-1],
+             [0, 0, 0, 0, 0, 0, 1,-1,-1,-1],
+             [0, 0, 0, 0, 0, 0, 0, 1,-1,-1],
+             [0, 0, 0, 0, 0, 0, 0, 0, 1,-1],
+             [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],])
+
 b= np.ones(10).T
 
 
@@ -109,5 +120,3 @@ print(df_b)
 print('')
 print('* For en utvidet kontroll testes matrisen med numpys innebygde solver funksjon som ikke er backsubstitution')
 
-
-print(backU(U,b,10))
