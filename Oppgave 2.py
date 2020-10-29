@@ -29,9 +29,13 @@ def jacobi(A, b, x, n):
         x_iter.append(x)
         e = abs(np.dot(A,x)-b)
         e_i.append(e)
-    return pd.DataFrame(x_iter), pd.DataFrame(e_i)
+    return pd.DataFrame({'x Approximations': x_iter}), pd.DataFrame({'errors': e_i})
 
-print(jacobi(A_any, b_any, x_0, n=10)[0])
-print('')
-print(jacobi(A_any, b_any, x_0, n=10)[1])
 
+B = np.array([[50,2,1],[2,60,3],[1,2,70]])
+b_2= np.array([1,2,3])
+x0 = np.array([0,0,0])
+
+df = jacobi(A=B, x=x0, b=b_2, n=20)
+
+print(df)
