@@ -5,15 +5,19 @@ import pandas as pd
 
 random.seed(30)
 
-m = 3 #int(input('Size n of matrix: n= '))
-A_any= np.random.randn(m, m) # Generate a random (n x n) matrix
+def backU(U,b,n):
+    '''Takes inn triangular matrix U, vector b and dimention of matrix n
+    computes x from matrix equation Ax=b troughout nested backsubstitution'''
 
-x_true = np.random.randn(m)
+    x_computed = np.zeros(n)
+    for i in range(n - 1, -1, -1):                  # itererer over matrisen vertikalt
+        x_tmp = b[i]                                # henter ut siste kjente x
 
-b_any = np.dot(A_any, x_true)
+        for j in range(n - 1, i, -1):               # iterer over kollonene for neste x gitt x_temp = kollonens b
+            x_tmp =x_tmp - x_computed[j] * U[i, j]  # beregner neste x
 
-
-x_0 = np.arange(m)
+        x_computed[i] = x_tmp / U[i, i]
+    return x_computed
 
 
 def jacobi(A, b, x, n):
@@ -38,4 +42,32 @@ x0 = np.array([0,0,0])
 
 df = jacobi(A=B, x=x0, b=b_2, n=20)
 
-print(df)
+
+
+def gaus_seidel(A, b, x_0, n):
+    D =  np.diag(np.diag(A))
+    U = np.triu(A)-D
+    L = np.tril(A)-D
+    LU = L + U
+    x_iter = []
+    e_i = []
+    x_new = np.dot(inv(D), (b - np.dot(LU,x_0)))
+    x_0 = x_new
+    for i in range(n):
+        x_new = np.dot(inv(D), (b - np.dot(U, x_0)-np.dot(L,x_new)))
+        x_iter.append(x_new)
+        x_0 = x_new
+
+
+        e = abs(np.dot(A,x_new)-b)
+        e_i.append(e)
+
+    return pd.DataFrame({'x Approximations gaus': x_iter}), pd.DataFrame({'errors': e_i})
+
+
+B = np.array([[3,1,-1],[2,4,1],[-1,2,5]])
+b_2 = np.array([4,1,1])
+x_guess = np.array([0,0,0])
+
+
+print(gaus_seidel(A=B, b=b_2, x_0=x_guess, n=100))
