@@ -33,7 +33,7 @@ def jacobi(A, b, x, n):
         x_iter.append(x)
         e = abs(np.dot(A,x)-b)
         e_i.append(e)
-    return pd.DataFrame({'x Approximations': x_iter}), pd.DataFrame({'errors': e_i})
+    return pd.DataFrame({'x Approximations jacobi': x_iter}), pd.DataFrame({'errors': e_i})
 
 
 B = np.array([[50,2,1],[2,60,3],[1,2,70]])
@@ -44,27 +44,7 @@ df = jacobi(A=B, x=x0, b=b_2, n=20)
 
 
 
-def gaus_seidel(A, b, x_0, n):
-    D =  np.diag(np.diag(A))
-    U = np.triu(A)-D
-    L = np.tril(A)-D
-    LU = L + U
-    x_iter = []
-    e_i = []
-    x_new = np.dot(inv(D), (b - np.dot(LU,x_0)))
-    x_0 = x_new
-    for i in range(n):
-        x_new = np.dot(inv(D), (b - np.dot(U, x_0)-np.dot(L,x_new)))
-        x_iter.append(x_new)
-        x_0 = x_new
-
-
-        e = abs(np.dot(A,x_new)-b)
-        e_i.append(e)
-
-    return pd.DataFrame({'x Approximations gaus_1': x_iter}), pd.DataFrame({'errors': e_i})
-
-def gaus_seidel_2(A, b, x_0, n):
+def gaus_seidel_brutalforce(A, b, x_0, n):
     D =  np.diag(np.diag(A))
     U = np.triu(A)-D
     L = np.tril(A)
@@ -79,34 +59,33 @@ def gaus_seidel_2(A, b, x_0, n):
         e = abs(np.dot(A,x_new)-b)
         e_i.append(e)
 
-    return pd.DataFrame({'x Approximations gaus_2': x_iter}), pd.DataFrame({'errors': e_i})
+    return pd.DataFrame({'x Approximations gaus_seidel_Brutal_Force': x_iter}), pd.DataFrame({'errors': e_i})
 
-def gaus_seidel_3(A, b, x_0, n):
+def gaus_seidel_backsub(A, b, x_0, n):
     D =  np.diag(np.diag(A))
-    U = np.triu(A)-D
+    U = np.triu(A)
     L = np.tril(A)-D
     x_iter = []
     e_i = []
-    x_new = backU(U= (L+D).T, b= b_2, N= L.shape[0])
+
 
     for i in range(n):
-        x_new = np.dot(inv(D), (b - np.dot(U, x_0)-np.dot(L,x_new)))
+
+        x_new = backU(U= U, b= (b_2-np.dot(L,x_0)), N= A.shape[0])
         x_iter.append(x_new)
         x_0 = x_new
-
 
         e = abs(np.dot(A,x_new)-b)
         e_i.append(e)
 
-    return pd.DataFrame({'x Approximations gaus_3': x_iter}), pd.DataFrame({'errors': e_i})
+    return pd.DataFrame({'x Approximations gaus_seidel_BackSubst': x_iter}), pd.DataFrame({'errors': e_i})
 
 B = np.array([[3,1,-1],[2,4,1],[-1,2,5]])
 b_2 = np.array([4,1,1])
 x_guess = np.array([0,0,0])
 
 
-print(gaus_seidel(A=B, b=b_2, x_0=x_guess, n=94))
+print(gaus_seidel_backsub(A=B, b=b_2, x_0=x_guess, n=55))
 print('')
-print(gaus_seidel_2(A=B, b=b_2, x_0=x_guess, n=45))
+print(gaus_seidel_brutalforce(A=B, b=b_2, x_0=x_guess, n=55))
 print('')
-print(gaus_seidel_3(A=B, b=b_2, x_0=x_guess, n=95))
