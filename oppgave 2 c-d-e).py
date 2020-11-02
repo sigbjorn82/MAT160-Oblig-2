@@ -45,7 +45,7 @@ def gaus_seidel_backsub(A, b, x_0, n):
 
     for i in range(n):
 
-        x_new = backU(U= U, b= (b_2-np.dot(L,x_0)), N= A.shape[0])
+        x_new = backU(U= U, b= (b-np.dot(L,x_0)), N= A.shape[0])
         x_iter.append(x_new)
         x_0 = x_new
 
@@ -54,8 +54,15 @@ def gaus_seidel_backsub(A, b, x_0, n):
 
     return pd.DataFrame({'x Approximations gaus_seidel_BackSubst': x_iter}), pd.DataFrame({'errors': e_i})
 
-alpha = 0.1
-A_alpha = sp.diags([-1, (2+alpha), -1], [1, 0, -1], shape=(15, 15)).toarray()
+alpha = 1
 
+# Oppgave 2c)
 
-print(A_alpha)
+A_alpha = np.matrix(sp.diags([-1, (2+alpha), -1], [1, 0, -1], shape=(1000, 1000)).toarray())    #1000 X 1000 MATRIX
+
+b_alpha = np.zeros((1000, 1), dtype='float')
+A_alpha.sum(axis=1, dtype='float', out=np.asmatrix(b_alpha))
+
+x0 =np.zeros((1000, 1), dtype='float')
+
+print(gaus_seidel_backsub(A=A_alpha, b=b_alpha, x_0=x0, n=50))

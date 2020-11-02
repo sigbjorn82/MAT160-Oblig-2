@@ -71,7 +71,7 @@ def gaus_seidel_backsub(A, b, x_0, n):
 
     for i in range(n):
 
-        x_new = backU(U= U, b= (b_2-np.dot(L,x_0)), N= A.shape[0])
+        x_new = backU(U= U, b= (b-np.dot(L,x_0)), N= A.shape[0])
         x_iter.append(x_new)
         x_0 = x_new
 
