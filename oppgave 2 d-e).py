@@ -2,6 +2,7 @@ import numpy as np
 from numpy.linalg import inv
 import pandas as pd
 import scipy.sparse as sp
+import matplotlib
 
 
 def backU(U,b,N):
@@ -68,15 +69,23 @@ def gaus_seidel_backsub(A, b, x_0, n):
 
     return pd.DataFrame({'x Approximations gaus_seidel_BackSubst': x_iter}), pd.DataFrame({'errors': e_i})
 
-alpha = 0.5
+
 
 # Oppgave 2c)
 
-A_alpha = np.matrix(sp.diags([-1, (2+alpha), -1], [1, 0, -1], shape=(1000, 1000)).toarray()) #1000 X 1000 MATRIX
+Alpha_1 = 0.1
+Alpha_2 = 0.2
+Alpha_3 = 0.5
+Alpha_4 = 2.0
 
-b_alpha = np.array(np.sum(A_alpha, axis=1))
-A_alpha.sum(axis=1, dtype='float', out=np.asmatrix(b_alpha))
+A_alpha = lambda alpha: np.matrix(sp.diags([-1, (2+alpha), -1], [1, 0, -1], shape=(1000, 1000)).toarray()) #1000 X 1000 MATRIX
+
+b_alpha = np.ones((1000, 1))
 
 x0 =np.zeros((1000, 1), dtype='float')
 
-print(gaus_seidel_brutalforce(A_alpha,b_alpha,x0,n=100))
+df=gaus_seidel_brutalforce(A_alpha(Alpha_1), b_alpha, x0, n=10)[1]
+
+print(df)
+
+
